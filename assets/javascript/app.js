@@ -33,10 +33,13 @@ $(document).ready(function() {
        
     });
     
-    firebase.database().ref().on("child_added", function(childSnapshot) {    
+    firebase.database().ref().on("child_added", function(snap) {    
     
-        var firstTrain = childSnapshot.val().firstTrain;
-        var frequency = childSnapshot.val().frequency;
+        var firstTrain = snap.val().firstTrain;
+        if (firstTrain.length < 4) {
+            firstTrain = "0" + firstTrain;
+        }
+        var frequency = snap.val().frequency;
         
         var time = moment(firstTrain, "hh:mm A").subtract(10, "years");
         var timeRemainder = moment().diff(moment(time), "minutes") % frequency;
@@ -44,12 +47,11 @@ $(document).ready(function() {
         var nextTrain = moment().add(minutesAway, "minutes").format("hh:mm A");
   
         $(".table").append("<tr><td> " +
-            childSnapshot.val().trainName + " </td><td> " +
-            childSnapshot.val().destination + " </td><td> " +
+            snap.val().trainName + " </td><td> " +
+            snap.val().destination + " </td><td> " +
             frequency + " </td><td> " +
             nextTrain + "</td><td> " +
-            minutesAway + "</td></tr>");
-                   
+            minutesAway + "</td></tr>");       
     }, function(errorObject) {
         console.log("The read failed: " + errorObject.code);
     });
