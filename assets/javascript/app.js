@@ -41,8 +41,8 @@ $(document).ready(function() {
         }
         var frequency = snap.val().frequency;
         
-        var time = moment(firstTrain, "hh:mm A").subtract(10, "years");
-        var timeRemainder = moment().diff(moment(time), "minutes") % frequency;
+        var time = moment(firstTrain, "hh:mm A");
+        var timeRemainder = moment().diff(time, "minutes") % frequency;
         var minutesAway = frequency - timeRemainder;
         var nextTrain = moment().add(minutesAway, "minutes").format("hh:mm A");
   
